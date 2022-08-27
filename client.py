@@ -26,4 +26,4 @@ while (True):
 
     print("ETH Market Price:", result/100)
     print("Requesting Oracle to update Price")
-    time.sleep(300)
+    time.sleep(2)
