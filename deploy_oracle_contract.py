@@ -17,44 +17,39 @@ install_solc('v0.4.25')
 print("installed solc version:",get_installed_solc_versions())
 set_solc_version('v0.4.25')
 contract = '''
-        pragma solidity ^0.4.21;
+pragma solidity ^0.4.21;
 
-        contract CMCOracle {
-          // Contract owner
-          address public owner;
+contract PriceOracle {
+    // Contract owner
+    address public owner;
 
-          // BTC Marketcap Storage
-          uint public ETHPrice;
+    // BTC Marketcap Storage
+    uint256 public ETHPrice;
 
-          // Callback function
-          event CallbackGetETHPrice();
+    // Callback function
+    event CallbackGetETHPrice();
 
-          constructor() public {
-            owner = msg.sender;
-          }
+    function updateETHPrice() public {
+        // Calls the callback function
+        emit CallbackGetETHPrice();
+    }
 
-          function updateETHPrice() public {
-            // Calls the callback function
-            emit CallbackGetETHPrice();
-          }
+    function setETHPrice(uint256 price) public {
+        ETHPrice = price;
+    }
 
-          function setETHPrice(uint price) public {
-            require(msg.sender == owner);
-            ETHPrice = price;
-          }
-
-          function getETHPrice() constant public returns (uint) {
-            return ETHPrice;
-          }
-        }
+    function getETHPrice() public constant returns (uint256) {
+        return ETHPrice;
+    }
+}
 '''
 compiled = compile_source(contract)
-contract = w3.eth.contract(abi=compiled['<stdin>:CMCOracle']['abi'],bytecode=compiled['<stdin>:CMCOracle']['bin'])
+contract = w3.eth.contract(abi=compiled['<stdin>:PriceOracle']['abi'],bytecode=compiled['<stdin>:PriceOracle']['bin'])
 tx_hash = contract.constructor().transact()
 tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 with open("abi.txt","w") as f:
-    json.dump(compiled['<stdin>:CMCOracle']['abi'],f)
+    json.dump(compiled['<stdin>:PriceOracle']['abi'],f)
 with open("bytecode.txt","w") as f:
-    f.write(compiled['<stdin>:CMCOracle']['bin'])
+    f.write(compiled['<stdin>:PriceOracle']['bin'])
 with open("contract_address.txt","w") as f:
     f.write(tx_receipt.contractAddress)

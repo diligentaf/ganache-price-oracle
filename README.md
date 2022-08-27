@@ -11,7 +11,7 @@ python3 deploy_oracle_contract.py
 python3 oracle_api.py
 ```
 
-# Terminal 2
+# Terminal 2 (Price updates every minute)
 ```shell
 python3 client.py
 ```
@@ -19,6 +19,7 @@ Then check contract_address.txt on root directory
 
 # Hardhat
 ```shell
+npx hardhat --network ganache test
 npx hardhat help
 npx hardhat test
 GAS_REPORT=true npx hardhat test

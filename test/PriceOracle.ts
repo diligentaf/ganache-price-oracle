@@ -1,9 +1,7 @@
-import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Contract, ContractFactory, constants, BigNumber } from "ethers";
 import path from "path";
 import fs from "fs";
-import { ethPriceSol } from "../typechain-types/contracts";
 
 describe("Price Oracle Testing", function () {
   const aggregatorAddress = fs.readFileSync(
@@ -12,7 +10,6 @@ describe("Price Oracle Testing", function () {
   );
 
   let addr0, addr1, addr2, addr3, addrs;
-  let PriceOracle: Contract;
   let EthPrice: Contract;
 
   before(async function () {
@@ -25,17 +22,17 @@ describe("Price Oracle Testing", function () {
     addr3 = _addr3;
     addrs = _addrs;
 
-    // contracts deployment
-    const PriceOracleFactory = await ethers.getContractFactory("OraclePrice");
-    PriceOracle = await PriceOracleFactory.connect(addr0).deploy(
-      aggregatorAddress
-    );
-    const EthPrice = await ethers.getContractAt("CMCOracle", aggregatorAddress);
+    // const PriceOracleFactory = await ethers.getContractFactory("OraclePrice");
+    // PriceOracle = await PriceOracleFactory.connect(addr0).deploy(
+    //   aggregatorAddress
+    // );
+    EthPrice = await ethers.getContractAt("PriceOracle", aggregatorAddress);
   });
 
   describe("fetch oracle data", function () {
     it("consoling the token address", async function () {
-      console.log(await EthPrice.getETHPrice())
+      let bint = BigInt(await EthPrice.getETHPrice())
+      console.log(Number(bint * 100n / 100n) / 100);
     });
   });
 });

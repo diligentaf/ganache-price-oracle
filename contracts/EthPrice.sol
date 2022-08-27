@@ -1,6 +1,6 @@
 pragma solidity ^0.4.21;
 
-contract CMCOracle {
+contract PriceOracle {
     // Contract owner
     address public owner;
 
@@ -22,4 +22,5 @@ contract CMCOracle {
     function getETHPrice() public constant returns (uint256) {
         return ETHPrice;
     }
+
 }
